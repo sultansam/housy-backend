@@ -9,10 +9,11 @@ exports.index = async (req, res) => {
   }
 };
 
-exports.create = async (req, res) => {
+exports.remove = async (req, res) => {
+  const id = { id: req.params.id };
   try {
-    const user = await User.create(req.body);
-    res.send({ data: user });
+    await User.destroy({ where: id });
+    res.status(200).send({ data: id });
   } catch (error) {
     console.log(error);
   }
