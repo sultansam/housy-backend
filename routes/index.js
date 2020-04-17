@@ -7,6 +7,9 @@ const { authenticated } = require("../middleware/auth");
 const { signin } = require("../controllers/signin");
 const { signup } = require("../controllers/signup");
 
+router.post("/signin", signin);
+router.post("/signup", signup);
+
 const {
   index: getData,
   detail: getDetail,
@@ -15,13 +18,17 @@ const {
   delete: deleteHouse
 } = require("../controllers/house");
 
-router.post("/signin", signin);
-router.post("/signup", signup);
-
 router.get("/houses", getData);
 router.get("/house/:id", getDetail);
 router.post("/house", authenticated, addHouse);
-router.post("/house/:id", authenticated, updateHouse);
+router.patch("/house/:id", authenticated, updateHouse);
 router.delete("/house/:id", authenticated, deleteHouse);
+
+const { create: createTrx, update: updateTrx, detail: getTrx, getAll: getAll } = require("../controllers/transaction");
+
+router.post("/transaction", authenticated, createTrx);
+router.patch("/order/:id", authenticated, updateTrx);
+router.get("/order/:id", authenticated, getTrx);
+router.get("/orders", authenticated, getAll);
 
 module.exports = router;

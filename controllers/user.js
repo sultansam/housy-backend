@@ -3,7 +3,7 @@ const { User } = require("../models");
 exports.index = async (req, res) => {
   try {
     const user = await User.findAll();
-    res.send({ data: Users });
+    res.send({ data: user });
   } catch (error) {
     console.log(error);
   }
@@ -12,7 +12,7 @@ exports.index = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const user = await User.create(req.body);
-    res.send({ data: users });
+    res.send({ data: user });
   } catch (error) {
     console.log(error);
   }
