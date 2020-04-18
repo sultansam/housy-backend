@@ -1,8 +1,17 @@
 const { House, City } = require("../models");
+const { Op } = require("sequelize");
 
 exports.index = async (req, res) => {
   try {
+    const typeRent = req.query.typeRent; // Filter Type Rent Params
+    const belowPrice = req.query.belowPrice; // Filter Price
+    const price = { [Op.lte]: belowPrice };
+
     const house = await House.findAll({
+      where: {
+        typeRent: typeRent,
+        price: price
+      },
       include: [
         {
           model: City,

@@ -15,7 +15,8 @@ const {
   detail: getDetail,
   create: addHouse,
   update: updateHouse,
-  delete: deleteHouse
+  delete: deleteHouse,
+  filter: searchHouse
 } = require("../controllers/house");
 
 router.get("/houses", getData);
