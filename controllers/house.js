@@ -5,7 +5,7 @@ exports.index = async (req, res) => {
   try {
     const typeRent = req.query.typeRent; // Filter Type Rent Params
     const belowPrice = req.query.belowPrice; // Filter Price
-    const price = { [Op.lte]: belowPrice };
+    const price = { [Op.lte]: belowPrice }; // Using Operator < = query
 
     const house = await House.findAll({
       where: {
