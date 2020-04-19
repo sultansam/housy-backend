@@ -4,10 +4,10 @@ const { User } = require("../models");
 
 exports.signin = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
     const user = await User.findOne({
       where: {
-        email
+        username
       }
     });
     if (!user) {
@@ -17,7 +17,7 @@ exports.signin = async (req, res) => {
         if (result) {
           jwt.sign({ id: User.id }, process.env.SECRET_KEY, (err, token) => {
             const data = {
-              email,
+              username,
               token
             };
             res.status(200).send({ data });

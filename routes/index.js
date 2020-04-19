@@ -16,10 +16,11 @@ const {
   create: addHouse,
   update: updateHouse,
   delete: deleteHouse,
-  filter: searchHouse
+  filter: filter
 } = require("../controllers/house");
 
 router.get("/houses", getData);
+router.get("/houses/filter", filter);
 router.get("/house/:id", getDetail);
 router.post("/house", authenticated, addHouse);
 router.patch("/house/:id", authenticated, updateHouse);

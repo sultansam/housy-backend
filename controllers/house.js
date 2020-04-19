@@ -3,15 +3,28 @@ const { Op } = require("sequelize");
 
 exports.index = async (req, res) => {
   try {
+    const house = await House.findAll({
+      include: [
+        {
+          model: City,
+          attributes: { exclude: ["createdAt", "updatedAt"] }
+        }
+      ],
+      attributes: { exclude: ["createdAt", "updatedAt", "CityId"] }
+    });
+    res.status(200).send({ data: house });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.filter = async (req, res) => {
+  try {
     const typeRent = req.query.typeRent; // Filter Type Rent Params
     const belowPrice = req.query.belowPrice; // Filter Price
     const price = { [Op.lte]: belowPrice }; // Using Operator < = query
-
     const house = await House.findAll({
-      where: {
-        typeRent: typeRent,
-        price: price
-      },
+      where: { typeRent, price },
       include: [
         {
           model: City,
@@ -48,13 +61,13 @@ exports.create = async (req, res) => {
   try {
     const house = await House.create(req.body);
     const Addhouse = await House.findOne({
+      where: { id: house.id },
       include: [
         {
           model: City,
           attributes: { exclude: ["createdAt", "updatedAt"] }
         }
       ],
-      where: { id: house.id },
       attributes: { exclude: ["createdAt", "updatedAt", "CityId"] }
     });
     res.status(201).send({ data: Addhouse });

@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "zer0cod3",
-    "database": "week2",
+    "database": "week21",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

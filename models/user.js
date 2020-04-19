@@ -7,14 +7,14 @@ module.exports = (sequelize, DataTypes) => {
       username: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      listAsId: DataTypes.INTEGER,
+      ListId: DataTypes.INTEGER,
       gender: DataTypes.STRING,
       address: DataTypes.STRING
     },
     {}
   );
   User.associate = function(models) {
-    // associations can be defined here
+    User.belongsTo(models.List);
   };
   return User;
 };
