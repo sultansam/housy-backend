@@ -7,14 +7,16 @@ module.exports = (sequelize, DataTypes) => {
       username: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      ListId: DataTypes.INTEGER,
+      role: DataTypes.STRING,
       gender: DataTypes.STRING,
+      phone: DataTypes.STRING,
       address: DataTypes.STRING
     },
     {}
   );
   User.associate = function(models) {
-    User.belongsTo(models.List);
+    User.hasMany(models.Transaction);
+    User.hasMany(models.House);
   };
   return User;
 };

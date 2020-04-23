@@ -9,6 +9,12 @@ npm install sequelize
 npm install --save-dev sequelize-cli nodemon
 ```
 
+### Bootstraping
+
+```
+npx sequelize-cli init
+```
+
 ### 1. Generate Models
 
 ```

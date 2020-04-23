@@ -1,26 +1,22 @@
-const { Transaction, House, City } = require("../models");
+const { Transaction, House } = require("../models");
+
+const inc = [
+  {
+    model: House,
+    attributes: { exclude: ["createdAt", "updatedAt"] }
+  }
+];
 
 exports.create = async (req, res) => {
   try {
     const transaction = await Transaction.create(req.body);
     const addTrx = await Transaction.findOne({
       where: { id: transaction.id },
-      include: [
-        {
-          model: House,
-          include: [
-            {
-              model: City,
-              attributes: { exclude: ["createdAt", "updatedAt"] }
-            }
-          ],
-          attributes: { exclude: ["createdAt", "updatedAt"] }
-        }
-      ]
+      include: inc
     });
     res.status(201).send({ data: addTrx });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -29,22 +25,11 @@ exports.update = async (req, res) => {
     await Transaction.update(req.body, { where: { id: req.params.id } });
     const transaction = await Transaction.findOne({
       where: { id: req.params.id },
-      include: [
-        {
-          model: House,
-          include: [
-            {
-              model: City,
-              attributes: { exclude: ["createdAt", "updatedAt"] }
-            }
-          ],
-          attributes: { exclude: ["createdAt", "updatedAt"] }
-        }
-      ]
+      include: inc
     });
     res.status(201).send({ data: transaction });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -52,43 +37,21 @@ exports.detail = async (req, res) => {
   try {
     const transaction = await Transaction.findOne({
       where: { id: req.params.id },
-      include: [
-        {
-          model: House,
-          include: [
-            {
-              model: City,
-              attributes: { exclude: ["createdAt", "updatedAt"] }
-            }
-          ],
-          attributes: { exclude: ["createdAt", "updatedAt"] }
-        }
-      ]
+      include: inc
     });
     res.status(200).send({ data: transaction });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
   }
 };
 
 exports.getAll = async (req, res) => {
   try {
     const transaction = await Transaction.findAll({
-      include: [
-        {
-          model: House,
-          include: [
-            {
-              model: City,
-              attributes: { exclude: ["createdAt", "updatedAt"] }
-            }
-          ],
-          attributes: { exclude: ["createdAt", "updatedAt"] }
-        }
-      ]
+      include: inc
     });
     res.status(200).send({ data: transaction });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
   }
 };

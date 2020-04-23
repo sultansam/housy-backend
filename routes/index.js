@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
 require("dotenv").config();
-
 const { authenticated } = require("../middleware/auth");
-
 const { signin } = require("../controllers/signin");
 const { signup } = require("../controllers/signup");
 
@@ -16,7 +14,8 @@ const {
   create: addHouse,
   update: updateHouse,
   delete: deleteHouse,
-  filter: filter
+  filter: filter,
+  listing: listing
 } = require("../controllers/house");
 
 router.get("/houses", getData);
@@ -25,6 +24,7 @@ router.get("/house/:id", getDetail);
 router.post("/house", authenticated, addHouse);
 router.patch("/house/:id", authenticated, updateHouse);
 router.delete("/house/:id", authenticated, deleteHouse);
+router.get("/listing", authenticated, listing);
 
 const {
   create: createTrx,
@@ -38,7 +38,9 @@ router.patch("/order/:id", authenticated, updateTrx);
 router.get("/order/:id", authenticated, getTrx);
 router.get("/orders", authenticated, getAll);
 
-const { index: getUser, remove: removeUsr } = require("../controllers/user");
+const { index: getUser, get: getProfile, remove: removeUsr } = require("../controllers/user");
+
+router.get("/user", authenticated, getProfile);
 router.get("/users", authenticated, getUser);
 router.delete("/users/:id", authenticated, removeUsr);
 

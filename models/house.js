@@ -9,18 +9,23 @@ module.exports = (sequelize, DataTypes) => {
       typeRent: DataTypes.STRING,
       Amenities: {
         type: DataTypes.STRING,
+        set(value) {
+          return this.setDataValue("Amenities", value.toString());
+        },
         get() {
-          return this.getDataValue("Amenities").split(", ");
+          const data = this.getDataValue("Amenities");
+          return data && data.split(",");
         }
       },
       bedroom: DataTypes.INTEGER,
       bathroom: DataTypes.INTEGER,
-      cityId: DataTypes.INTEGER
+      city: DataTypes.INTEGER,
+      userId: DataTypes.INTEGER
     },
     {}
   );
   House.associate = function(models) {
-    House.belongsTo(models.City);
+    House.belongsTo(models.User);
   };
   return House;
 };

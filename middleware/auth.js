@@ -4,17 +4,18 @@ const { User } = require("../models");
 exports.authenticated = async (req, res, next) => {
   try {
     let token = req.header("Authorization");
-    
     if (token) {
       token = token.replace("Bearer ", "");
       const data = jwt.verify(token, process.env.SECRET_KEY);
+      
       if (data) {
         const user = await User.findOne({ where: { id: data.id } });
-        console.log(user)
+        
         if (!user) {
           res.status(403).send({ message: "Forbidden request!" });
         } else {
           req.user = user.id;
+          req.role = user.role;
           req.token = token;
           next();
         }

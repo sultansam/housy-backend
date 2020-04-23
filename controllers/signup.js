@@ -4,6 +4,7 @@ const { User } = require("../models");
 
 exports.signup = async (req, res) => {
   try {
+
     const saltRounds = 10;
     const { username, password } = req.body;
     const user = await User.findOne({
@@ -11,19 +12,22 @@ exports.signup = async (req, res) => {
         username
       }
     });
+
     if (!user) {
       bcrypt.hash(password, saltRounds, async (err, hash) => {
         const value = {
           ...req.body,
           password: hash
         };
+
         const newUser = await User.create(value);
         jwt.sign({ id: newUser.id }, process.env.SECRET_KEY, (err, token) => {
           const data = {
             username,
             token
           };
-          res.status(200).send({ data });
+          res.status(201).send({ data });
+          
         });
       });
     } else {

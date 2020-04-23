@@ -10,14 +10,19 @@ exports.signin = async (req, res) => {
         username
       }
     });
+
     if (!user) {
       res.status(401).send({ message: "Authentication Failure" });
     } else {
+
+      const role = user.role;
+
       bcrypt.compare(password, user.password, (err, result) => {
         if (result) {
-          jwt.sign({ id: User.id }, process.env.SECRET_KEY, (err, token) => {
+          jwt.sign({ id: user.id }, process.env.SECRET_KEY, (err, token) => {
             const data = {
               username,
+              role,
               token
             };
             res.status(200).send({ data });

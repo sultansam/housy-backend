@@ -20,10 +20,13 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
-      ListId: {
-        type: Sequelize.INTEGER
+      role: {
+        type: Sequelize.STRING
       },
       gender: {
+        type: Sequelize.STRING
+      },
+      phone: {
         type: Sequelize.STRING
       },
       address: {
