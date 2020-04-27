@@ -1,20 +1,16 @@
-const { House, User, List } = require("../models");
+const { house, user } = require("../models");
 
 exports.index = async (req, res) => {
   try {
-    const user = await User.findAll({
+    const users = await user.findAll({
       include: [
         {
-          model: List,
-          attributes: { exclude: ["createdAt", "updatedAt"] }
-        },
-        {
-          model: House,
+          model: house,
           attributes: { exclude: ["createdAt", "updatedAt"] }
         }
       ]
     });
-    res.send({ data: user });
+    res.send({ data: users });
   } catch (error) {
     console.log(error);
   }
@@ -23,18 +19,18 @@ exports.index = async (req, res) => {
 exports.get = async (req, res) => {
   const id = req.user;
   try {
-    const user = await User.findOne({
+    const users = await user.findOne({
       where: { id: id },
       attributes: { exclude: ["createdAt", "updatedAt"] }
     });
-    res.status(200).send({ data: user });
+    res.status(200).send({ data: users });
   } catch (error) {}
 };
 
 exports.remove = async (req, res) => {
   const id = { id: req.params.id };
   try {
-    await User.destroy({ where: id });
+    await user.destroy({ where: id });
     res.status(200).send({ data: id });
   } catch (error) {
     console.log(error);

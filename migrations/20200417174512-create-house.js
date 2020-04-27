@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Houses", {
+    return queryInterface.createTable("houses", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -17,13 +17,16 @@ module.exports = {
       price: {
         type: Sequelize.INTEGER
       },
+      images: {
+        type: Sequelize.STRING(1000)
+      },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(1000)
       },
       typeRent: {
         type: Sequelize.STRING
       },
-      Amenities: {
+      amenities: {
         type: Sequelize.STRING
       },
       bedroom: {
@@ -41,7 +44,7 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Users",
+          model: "users",
           key: "id"
         },
         onUpdate: "RESTRICT",
@@ -58,6 +61,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("Houses");
+    return queryInterface.dropTable("houses");
   }
 };

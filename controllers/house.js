@@ -1,48 +1,75 @@
-const { House, User } = require("../models");
+const { house, user } = require("../models");
 const { Op } = require("sequelize");
 
-const attr = { exclude: ["createdAt", "updatedAt"] };
+// Filter Functions
+const filterByTypeRent = typeRent => {
+  if (!typeRent) return {};
+  return { typeRent };
+};
 
+const filterByBelowPrice = belowPrice => {
+  if (!belowPrice) return {};
+  return {
+    price: {
+      [Op.lt]: belowPrice
+    }
+  };
+};
+
+// GET HOUSE
 exports.index = async (req, res) => {
   try {
-    const house = await House.findAll({
-      attributes: attr
+    const { typeRent, belowPrice } = req.query;
+    const houses = await house.findAll({
+      where: {
+        ...filterByTypeRent(typeRent),
+        ...filterByBelowPrice(belowPrice)
+      },
+      attributes: { exclude: ["createdAt", "updatedAt", "userId", "UserId"] },
+      order: [["id", "DESC"]]
     });
-    res.status(200).send({ data: house });
+    res.status(200).send({ data: houses });
   } catch (err) {
     console.log(err);
   }
 };
 
+// GET DETAIL HOUSE
 exports.detail = async (req, res) => {
   try {
-    const house = await House.findOne({
+    const houses = await house.findOne({
       where: { id: req.params.id },
-
-      attributes: attr
+      include: [
+        {
+          model: user,
+          attributes: ["id"]
+        }
+      ],
+      attributes: { exclude: ["createdAt", "updatedAt", "userId", "UserId"] }
     });
-    res.status(200).send({ data: house });
+    res.status(200).send({ data: houses });
   } catch (err) {
     console.log(err);
   }
 };
 
+// CREATE HOUSE
 exports.create = async (req, res) => {
   try {
     req.body.userId = req.user; //put userId value
     if (req.role === "owner") {
-      const newhouse = await House.create(req.body);
-      const house = await House.findOne({
+      const newhouse = await house.create(req.body);
+      const houses = await house.findOne({
         where: { id: newhouse.id },
         include: [
           {
-            model: User,
+            model: user,
             attributes: ["username"]
           }
         ],
         attributes: { exclude: ["createdAt", "updatedAt", "UserId", "userId"] }
       });
-      res.status(200).send({ data: house });
+      res.status(200).send({ data: houses });
     } else {
       res.status(405).send({ message: "Forbidden Request,You are not Owner" });
     }
@@ -52,53 +79,42 @@ exports.create = async (req, res) => {
   }
 };
 
+// PATCH HOUSE
 exports.update = async (req, res) => {
   try {
-    await House.update(req.body, { where: { id: req.params.id } });
-    const house = await House.findOne({
+    await house.update(req.body, { where: { id: req.params.id } });
+    const houses = await house.findOne({
       where: { id: req.params.id },
-      attributes: attr
+      attributes: { exclude: ["createdAt", "updatedAt", "userId", "UserId"] }
     });
-    res.status(201).send({ data: house });
+    res.status(201).send({ data: houses });
   } catch (err) {
     console.log(err);
   }
 };
 
+// DELETE HOUSE
 exports.delete = async (req, res) => {
   const id = { id: req.params.id };
   try {
-    await House.destroy({ where: id });
+    await house.destroy({ where: id });
     res.status(200).send({ data: id });
   } catch (err) {
     console.log(err);
   }
 };
 
-exports.filter = async (req, res) => {
-  try {
-    const typeRent = req.query.typeRent; // Filter Type Rent Params
-    const belowPrice = req.query.belowPrice; // Filter Price
-    const price = { [Op.lte]: belowPrice }; // Using Operator < = query
-    const house = await House.findAll({
-      where: { typeRent, price },
-      attributes: attr
-    });
-    res.status(200).send({ data: house });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-// Owner Roles
-
+// LIST HOUSE BY OWNER
 exports.listing = async (req, res) => {
   try {
-    const house = await House.findAll({
-      where: { userId: req.user },
-      attributes: { exclude: ["createdAt", "updatedAt", "userId", "UserId"] }
-    });
-    res.status(200).send({ data: house });
+    if (req.role === "owner") {
+      const houses = await house.findAll({
+        where: { userId: req.user },
+        attributes: { exclude: ["createdAt", "updatedAt", "userId", "UserId"] },
+        order: [["id", "DESC"]]
+      });
+      res.status(200).send({ data: houses });
+    }
   } catch (err) {
     console.log(err);
   }

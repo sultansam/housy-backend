@@ -14,13 +14,13 @@ const {
   create: addHouse,
   update: updateHouse,
   delete: deleteHouse,
-  filter: filter,
   listing: listing
 } = require("../controllers/house");
 
 router.get("/houses", getData);
-router.get("/houses/filter", filter);
 router.get("/house/:id", getDetail);
+
+// Auth
 router.post("/house", authenticated, addHouse);
 router.patch("/house/:id", authenticated, updateHouse);
 router.delete("/house/:id", authenticated, deleteHouse);
@@ -33,12 +33,18 @@ const {
   getAll: getAll
 } = require("../controllers/transaction");
 
-router.post("/transaction", authenticated, createTrx);
+router.post("/order", authenticated, createTrx);
 router.patch("/order/:id", authenticated, updateTrx);
+
+// GET Booking By Id
 router.get("/order/:id", authenticated, getTrx);
 router.get("/orders", authenticated, getAll);
 
-const { index: getUser, get: getProfile, remove: removeUsr } = require("../controllers/user");
+const {
+  index: getUser,
+  get: getProfile,
+  remove: removeUsr
+} = require("../controllers/user");
 
 router.get("/user", authenticated, getProfile);
 router.get("/users", authenticated, getUser);

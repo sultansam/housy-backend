@@ -1,33 +1,32 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { User } = require("../models");
+const { user } = require("../models");
 
 exports.signup = async (req, res) => {
   try {
-
     const saltRounds = 10;
     const { username, password } = req.body;
-    const user = await User.findOne({
+    const users = await user.findOne({
       where: {
         username
       }
     });
 
-    if (!user) {
+    if (!users) {
+      const role = req.body.role;
       bcrypt.hash(password, saltRounds, async (err, hash) => {
         const value = {
           ...req.body,
           password: hash
         };
-
-        const newUser = await User.create(value);
+        const newUser = await user.create(value);
         jwt.sign({ id: newUser.id }, process.env.SECRET_KEY, (err, token) => {
           const data = {
             username,
-            token
+            token,
+            role
           };
           res.status(201).send({ data });
-          
         });
       });
     } else {

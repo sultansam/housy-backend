@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { User } = require("../models");
+const { user } = require("../models");
 
 exports.authenticated = async (req, res, next) => {
   try {
@@ -9,13 +9,13 @@ exports.authenticated = async (req, res, next) => {
       const data = jwt.verify(token, process.env.SECRET_KEY);
       
       if (data) {
-        const user = await User.findOne({ where: { id: data.id } });
+        const users = await user.findOne({ where: { id: data.id } });
         
-        if (!user) {
+        if (!users) {
           res.status(403).send({ message: "Forbidden request!" });
         } else {
-          req.user = user.id;
-          req.role = user.role;
+          req.user = users.id;
+          req.role = users.role;
           req.token = token;
           next();
         }
