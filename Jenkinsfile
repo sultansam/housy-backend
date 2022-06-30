@@ -1,7 +1,7 @@
 def secret = 'sultan'
 def server = 'sultan12@103.55.37.194'
 def dir = 'housy-backend'
-def branch = 'developmet'
+def branch = 'production'
 
 pipeline{
         agent any
