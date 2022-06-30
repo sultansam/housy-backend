@@ -1,6 +1,6 @@
 def secret = 'sultan'
 def server = 'sultan12@103.55.37.194'
-def dir = 'final'
+def dir = 'final/housy-backend'
 def branch = 'production'
 
 pipeline{
