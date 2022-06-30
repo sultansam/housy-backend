@@ -1,5 +1,3 @@
-backend
-docker-compose
 version: '3'
 services:
   backend1:
@@ -11,7 +9,7 @@ services:
       - 5050:5000
 
   backend2:
-    image: bacend/housy:1.0
+    image: backend/housy:1.0
     container_name: backend2
     stdin_open: true
     ports:
